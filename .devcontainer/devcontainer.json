@@ -1,9 +1,17 @@
 {
-  "name": "Android Docker",
+  "name": "Android Emulator Environment",
+  "image": "mcr.microsoft.com/vscode/devcontainers/base:ubuntu-20.04",
   "build": {
-    "dockerfile": "Dockerfile"
+    "dockerfile": "./Dockerfile"
   },
-  "runArgs": ["--privileged"],
   "forwardPorts": [5900],
-  "remoteUser": "root"
+  "postCreateCommand": "bash /workspace/setup.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode-remote.remote-containers",
+        "vscjava.vscode-java-pack"
+      ]
+    }
+  }
 }
