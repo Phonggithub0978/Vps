@@ -6,6 +6,11 @@ ENV TZ=Asia/Ho_Chi_Minh
 RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && \
     echo $TZ > /etc/timezone
 
+# Cấu hình tzdata để tránh hiển thị menu chọn tay
+RUN echo "tzdata tzdata/Areas select Asia" | debconf-set-selections && \
+    echo "tzdata tzdata/Zones/Asia select Ho_Chi_Minh" | debconf-set-selections && \
+    DEBIAN_FRONTEND=noninteractive apt update && apt install -y tzdata
+
 # Cài đặt các công cụ cần thiết
 RUN apt install -y \
     openjdk-11-jdk \
@@ -22,15 +27,7 @@ RUN apt install -y \
     net-tools \
     x11vnc \
     xvfb \
-    python3 \
-    python3-pip \
     && rm -rf /var/lib/apt/lists/*
-
-# Cài đặt noVNC và Websockify
-RUN git clone https://github.com/novnc/noVNC.git /opt/noVNC && \
-    cd /opt/noVNC && \
-    git submodule update --init --recursive && \
-    pip3 install websockify
 
 # Cài đặt Android SDK
 ENV ANDROID_HOME /opt/android-sdk
@@ -56,8 +53,7 @@ RUN mkdir -p ~/.vnc && \
     echo "password" | vncpasswd -f > ~/.vnc/passwd && \
     chmod 600 ~/.vnc/passwd
 
-# CMD: Chạy Xvfb, VNC và noVNC khi container khởi động
+# CMD: Chạy emulator và x11vnc khi container khởi động
 CMD Xvfb :0 -screen 0 1280x720x16 & \
     x11vnc -display :0 -forever -passwd password & \
-    emulator -avd my_avd -no-audio -gpu swiftshader_indirect & \
-    /opt/noVNC/utils/novnc_proxy --vnc localhost:5900 --listen 6080
+    emulator -avd my_avd -no-audio -gpu swiftshader_indirect
