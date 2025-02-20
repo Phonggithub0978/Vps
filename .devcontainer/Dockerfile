@@ -1,3 +1,6 @@
+# Sử dụng Ubuntu 20.04 làm base
+FROM ubuntu:20.04
+
 # Đặt múi giờ mặc định (ví dụ: Asia/Ho_Chi_Minh)
 ENV TZ=Asia/Ho_Chi_Minh
 RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && \
