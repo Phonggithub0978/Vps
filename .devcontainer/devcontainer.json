@@ -1,0 +1,9 @@
+{
+  "name": "Android Docker",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "runArgs": ["--privileged"],
+  "forwardPorts": [5900],
+  "remoteUser": "root"
+}
