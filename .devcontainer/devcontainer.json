@@ -1,0 +1,23 @@
+{
+  "name": "Ubuntu with KVM & systemd",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "runArgs": [
+    "--privileged",
+    "--device=/dev/kvm",
+    "--device=/dev/vhost-net",
+    "--device=/dev/net/tun",
+    "--cap-add=NET_ADMIN",
+    "--cap-add=SYS_ADMIN",
+    "--cgroupns=host",
+    "-v", "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+  ],
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "mounts": [
+    "source=/path/to/local/folder,target=/workspace,type=bind,consistency=cached"
+  ],
+  "postStartCommand": "echo '✅ Codespace ready with systemd and KVM support!'"
+}
